@@ -1,15 +1,15 @@
 <p align="center">
     <a href="https://github.com/chrisdhaan/CDMarkdownKit">
-        <img src="https://raw.githubusercontent.com/chrisdhaan/CDMarkdownKit/master/Documentation/cdmarkdownkit.png" alt="CDMarkdownKit" width="850" />
+        <img src="https://raw.githubusercontent.com/chrisdhaan/CDMarkdownKit/master/.github/cdmarkdownkit.png" alt="CDMarkdownKit" width="850" />
     </a>
 </p>
 
 <p align="center">
     <a href="https://github.com/chrisdhaan/CDMarkdownKit">
-        <img src="https://raw.githubusercontent.com/chrisdhaan/CDMarkdownKit/master/Documentation/github.png" alt="Star CDMarkdownKit On Github" />
+        <img src="https://raw.githubusercontent.com/chrisdhaan/CDMarkdownKit/master/.github/github.png" alt="Star CDMarkdownKit On Github" />
     </a>
     <a href="http://stackoverflow.com/questions/tagged/cdmarkdownkit">
-        <img src="https://raw.githubusercontent.com/chrisdhaan/CDMarkdownKit/master/Documentation/stackoverflow.png" alt="Stack Overflow" />
+        <img src="https://raw.githubusercontent.com/chrisdhaan/CDMarkdownKit/master/.github/stackoverflow.png" alt="Stack Overflow" />
     </a>
 </p>
 
@@ -50,12 +50,6 @@ For a demonstration of the capabilities of CDMarkdownKit; run the iOS Example pr
 
 ---
 
-## Pre-Release Software
-
-This framework is currently in development. As of release 0.9.0 the code is stable and in a usable state to install in applications. But be aware that breaking changes may occur until 1.0.0 is released.
-
----
-
 ## Features
 
 - [x] Markdown Parsing
@@ -69,13 +63,13 @@ This framework is currently in development. As of release 0.9.0 the code is stab
     - [x] Link
     - [x] Image
 - [x] UITextView With Markdown Formatting
-- [ ] UILabel With Markdown Formatting
-- [x] OS Support
+- [x] UILabel With Markdown Formatting
+- [x] Platform Support
   - [x] iOS
   - [x] macOS
   - [x] tvOS
   - [x] watchOS
-- [ ] Documentation
+- [x] Documentation
 
 ---
 
@@ -100,10 +94,7 @@ gem install cocoapods
 To integrate CDMarkdownKit into your Xcode project using CocoaPods, simply add the following line to your Podfile:
 
 ```ruby
-# use this line to install CDMarkdownKit while in development
-pod 'CDMarkdownKit', :git => 'https://github.com/chrisdhaan/CDMarkdownKit'
-# this line will eventually be used upon the 1.0.0 release of CDMarkdownKit and can be disregarded for now
-pod 'CDMarkdownKit', '1.0.0'
+pod 'CDMarkdownKit', '1.1.0'
 ```
 
 Afterwards, run the following command:
@@ -126,10 +117,7 @@ brew install carthage
 To integrate CDMarkdownKit into your Xcode project using Carthage, simply add the following line to your Cartfile:
 
 ```ruby
-# use this line to install CDMarkdownKit while in development
-github "chrisdhaan/CDMarkdownKit"
-# this line will eventually be used upon the 1.0.0 release of CDMarkdownKit and can be disregarded for now
-github "chrisdhaan/CDMarkdownKit" == 1.0.0
+github "chrisdhaan/CDMarkdownKit" == 1.1.0
 ```
 
 Afterwards, run the following command:
@@ -152,7 +140,7 @@ To integrate CDMarkdownKit into your Xcode project using The Swift Package Manag
 
 ```swift
 dependencies: [
-    .Package(url: "https://github.com/chrisdhaan/CDMarkdownKit.git", "1.0.0")
+    .Package(url: "https://github.com/chrisdhaan/CDMarkdownKit.git", "1.1.0")
 ]
 ```
 
@@ -239,6 +227,9 @@ markdownParser.code.backgroundColor = UIColor.black
 markdownParser.syntax.font = UIFont.systemFont(ofSize: 15)
 markdownParser.syntax.color = UIColor.lightGray
 markdownParser.syntax.backgroundColor = UIColor.black
+/// Image
+markdownParser.image.size = CGSize(width: 100,
+                                   height: 50)
 // Parse markdown
 let markdown = "This *framework* helps **with** parsing `markdown`."
 label.attributedText = markdownParser.parse(markdown)

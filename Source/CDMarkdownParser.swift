@@ -74,6 +74,7 @@ open class CDMarkdownParser {
                 fontColor: CDColor = CDColor.black,
                 backgroundColor: CDColor = CDColor.clear,
                 paragraphStyle: NSParagraphStyle? = nil,
+                imageSize: CGSize? = nil,
                 automaticLinkDetectionEnabled: Bool = true,
                 customElements: [CDMarkdownElement] = []) {
         self.font = font
@@ -99,7 +100,8 @@ open class CDMarkdownParser {
         code = CDMarkdownCode(font: font)
         syntax = CDMarkdownSyntax(font: font)
 #if os(iOS) || os(macOS) || os(tvOS)
-        image = CDMarkdownImage(font: font)
+        image = CDMarkdownImage(font: font,
+                                size: imageSize)
 #endif
         
         self.automaticLinkDetectionEnabled = automaticLinkDetectionEnabled
@@ -155,6 +157,20 @@ open class CDMarkdownParser {
         }
         let range = NSRange(location: 0,
                             length: attributedString.length)
+#if swift(>=4.0)
+        attributedString.addAttribute(NSAttributedStringKey.font,
+                                      value: font,
+                                      range: range)
+        attributedString.addAttribute(NSAttributedStringKey.foregroundColor,
+                                      value: fontColor,
+                                      range: range)
+        attributedString.addAttribute(NSAttributedStringKey.backgroundColor,
+                                      value: backgroundColor,
+                                      range: range)
+        attributedString.addAttribute(NSAttributedStringKey.paragraphStyle,
+                                      value: paragraphStyle,
+                                      range: range)
+#else
         attributedString.addAttribute(NSFontAttributeName,
                                       value: font,
                                       range: range)
@@ -167,6 +183,7 @@ open class CDMarkdownParser {
         attributedString.addAttribute(NSParagraphStyleAttributeName,
                                       value: paragraphStyle,
                                       range: range)
+#endif
         var elements: [CDMarkdownElement] = escapingElements
         elements.append(contentsOf: defaultElements)
         elements.append(contentsOf: customElements)

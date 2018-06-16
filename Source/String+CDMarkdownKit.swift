@@ -42,15 +42,16 @@ internal extension String {
     // Converts each 4 digit characters to its String form  (e.g. "0048" -> "H")
     func unescapeUTF16() -> String? {
         var utf16Array = [UInt16]()
+#if swift(>=3.2)
         stride(from: 0,
-               to: characters.count,
+               to: count,
                by: 4).forEach {
-            let startIndex = characters.index(characters.startIndex,
-                                              offsetBy: $0)
-            if ($0 + 4) <= characters.count {
-                let endIndex = characters.index(characters.startIndex,
-                                                offsetBy: $0 + 4)
-                let hex4 = substring(with: startIndex..<endIndex)
+            let startIdx = index(startIndex,
+                                 offsetBy: $0)
+            if ($0 + 4) <= count {
+                let endIdx = index(startIndex,
+                                   offsetBy: $0 + 4)
+                let hex4 = self[startIdx..<endIdx]
                 
                 if let utf16 = UInt16(hex4,
                                       radix: 16) {
@@ -61,5 +62,36 @@ internal extension String {
         
         return String(utf16CodeUnits: utf16Array,
                       count: utf16Array.count)
+#else
+        stride(from: 0,
+               to: characters.count,
+               by: 4).forEach {
+                let startIdx = index(startIndex,
+                                     offsetBy: $0)
+                if ($0 + 4) <= characters.count {
+                    let endIdx = index(startIndex,
+                                       offsetBy: $0 + 4)
+                    let hex4 = self[startIdx..<endIdx]
+                    
+                    if let utf16 = UInt16(hex4,
+                                          radix: 16) {
+                        utf16Array.append(utf16)
+                    }
+                }
+        }
+        
+        return String(utf16CodeUnits: utf16Array,
+                      count: utf16Array.count)
+#endif
+    }
+    
+    func range(from nsRange: NSRange) -> Range<String.Index>? {
+        guard
+            let from16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location, limitedBy: utf16.endIndex),
+            let to16 = utf16.index(utf16.startIndex, offsetBy: nsRange.location + nsRange.length, limitedBy: utf16.endIndex),
+            let from = from16.samePosition(in: self),
+            let to = to16.samePosition(in: self)
+            else { return nil }
+        return from ..< to
     }
 }
