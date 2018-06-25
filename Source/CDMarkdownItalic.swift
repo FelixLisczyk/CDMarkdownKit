@@ -33,7 +33,7 @@
 
 open class CDMarkdownItalic: CDMarkdownCommonElement {
     
-    fileprivate static let regex = "(\\s*|^)(\\*)(.+?)(\\2)"
+    fileprivate static let regex = "()(\\*)(.*?)(\\2)"
     
     open var font: CDFont?
     open var color: CDColor?
