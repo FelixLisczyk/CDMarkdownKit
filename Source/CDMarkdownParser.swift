@@ -63,8 +63,8 @@ open class CDMarkdownParser {
     // Enables or disables detection of URLs even without Markdown format
     open var automaticLinkDetectionEnabled: Bool = true
     open let font: CDFont
-    open let fontColor: CDColor
-    open let backgroundColor: CDColor
+    open var fontColor: CDColor
+    open var backgroundColor: CDColor
     open let paragraphStyle: NSParagraphStyle
 
     // MARK: - Initializer
