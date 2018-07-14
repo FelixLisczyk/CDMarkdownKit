@@ -75,7 +75,9 @@ open class CDMarkdownParser {
             self.italic.color = fontColor
             self.code.color = fontColor
             self.syntax.color = fontColor
+#if os(iOS) || os(macOS) || os(tvOS)
             self.image.color = fontColor
+#endif
         }
     }
 
@@ -90,7 +92,9 @@ open class CDMarkdownParser {
             self.italic.backgroundColor = backgroundColor
             self.code.backgroundColor = backgroundColor
             self.syntax.backgroundColor = backgroundColor
+#if os(iOS) || os(macOS) || os(tvOS)
             self.image.backgroundColor = backgroundColor
+#endif
         }
     }
 
