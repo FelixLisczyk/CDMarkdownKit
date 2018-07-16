@@ -34,6 +34,18 @@ import Foundation
 #elseif os(macOS)
     import Cocoa
     public typealias CDFont = NSFont
+
+    extension NSFont {
+        func withSize(_ fontSize: CGFloat) -> NSFont {
+            #if swift(>=4.0)
+                let fontManager = NSFontManager.shared
+            #else
+                let fontManager = NSFontManager.shared()
+            #endif
+            return fontManager.convert(self, toSize: fontSize)
+        }
+    }
+
     #if swift(>=4.0)
         public typealias CDFontDescriptorSymbolicTraits = NSFontDescriptor.SymbolicTraits
 
