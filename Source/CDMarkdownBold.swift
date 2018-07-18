@@ -35,7 +35,12 @@ open class CDMarkdownBold: CDMarkdownCommonElement {
     
     fileprivate static let regex = "()(\\*\\*)(.*?)(\\2)"
     
-    open var font: CDFont?
+    open var font: CDFont? {
+        didSet {
+            self.font = font?.bold()
+        }
+    }
+
     open var color: CDColor?
     open var backgroundColor: CDColor?
     open var paragraphStyle: NSParagraphStyle?
