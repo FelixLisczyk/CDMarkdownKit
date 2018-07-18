@@ -62,7 +62,23 @@ open class CDMarkdownParser {
     // MARK: - Configuration
     // Enables or disables detection of URLs even without Markdown format
     open var automaticLinkDetectionEnabled: Bool = true
-    open let font: CDFont
+
+    open var font: CDFont {
+        didSet {
+            self.header.font = font
+            self.list.font = font
+            self.quote.font = font
+            self.link.font = font
+            self.automaticLink.font = font
+            self.bold.font = font
+            self.italic.font = font
+            self.code.font = font
+            self.syntax.font = font
+#if os(iOS) || os(macOS) || os(tvOS)
+            self.image.font = font
+#endif
+        }
+    }
 
     open var fontColor: CDColor {
         didSet {
