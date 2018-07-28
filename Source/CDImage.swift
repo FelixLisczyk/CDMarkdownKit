@@ -28,17 +28,9 @@
 import Foundation
 
 #if os(iOS) || os(tvOS) || os(watchOS)
-    import UIKit
-    public typealias CDImage = UIImage
+import UIKit
+public typealias CDImage = UIImage
 #elseif os(macOS)
-    import Cocoa
-    public typealias CDImage = NSImage
-
-    #if swift(>=4.0)
-    extension NSImage {
-        convenience init?(named name: String) {
-            self.init(named: NSImage.Name(rawValue: name))
-        }
-    }
-    #endif
+import Cocoa
+public typealias CDImage = NSImage
 #endif
