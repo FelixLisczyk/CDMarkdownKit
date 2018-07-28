@@ -34,16 +34,4 @@ import Foundation
 #elseif os(macOS)
     import Cocoa
     public typealias CDFont = NSFont
-
-    #if swift(>=4.0)
-        public typealias CDFontDescriptorSymbolicTraits = NSFontDescriptor.SymbolicTraits
-
-        extension CDFontDescriptorSymbolicTraits {
-            init(_ rawValue: UInt32) {
-                self.init(rawValue: rawValue)
-            }
-        }
-    #else
-        public typealias CDFontDescriptorSymbolicTraits = NSFontSymbolicTraits
-    #endif
 #endif
