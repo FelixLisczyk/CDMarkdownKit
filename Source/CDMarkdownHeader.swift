@@ -81,13 +81,6 @@ open class CDMarkdownHeader: CDMarkdownLevelElement {
                          range: NSRange,
                          level: Int) {
         attributedString.deleteCharacters(in: range)
-
-        let string = attributedString.mutableString
-        if range.location - 2 > 0 && string.substring(with: NSRange(location: range.location - 2,
-                                                                    length: 2)) == "\n\n" {
-            string.deleteCharacters(in: NSRange(location: range.location - 1,
-                                                length: 1))
-        }
     }
 
     open func attributesForLevel(_ level: Int) -> [CDAttributesKey: AnyObject] {
