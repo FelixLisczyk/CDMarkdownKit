@@ -33,7 +33,7 @@
 
 open class CDMarkdownBold: CDMarkdownCommonElement {
     
-    fileprivate static let regex = "()(\\*\\*)(.*?)(\\2)"
+    fileprivate static let regex = "()(\\*\\*)([^\\*\\n]+?)(\\2)"
     
     open var font: CDFont? {
         didSet {
