@@ -115,7 +115,7 @@ open class CDMarkdownParser {
         }
     }
 
-    public let paragraphStyle: NSParagraphStyle
+    public var paragraphStyle: NSParagraphStyle
 
     // MARK: - Initializer
     public init(font: CDFont = CDFont.systemFont(ofSize: 12),
