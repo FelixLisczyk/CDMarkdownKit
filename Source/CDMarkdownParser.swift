@@ -115,7 +115,22 @@ open class CDMarkdownParser {
         }
     }
 
-    public var paragraphStyle: NSParagraphStyle
+    open var paragraphStyle: NSParagraphStyle {
+        didSet {
+            self.header.paragraphStyle = paragraphStyle
+            self.list.paragraphStyle = paragraphStyle
+            self.quote.paragraphStyle = paragraphStyle
+            self.link.paragraphStyle = paragraphStyle
+            self.automaticLink.paragraphStyle = paragraphStyle
+            self.bold.paragraphStyle = paragraphStyle
+            self.italic.paragraphStyle = paragraphStyle
+            self.code.paragraphStyle = paragraphStyle
+            self.syntax.paragraphStyle = paragraphStyle
+#if os(iOS) || os(macOS) || os(tvOS)
+            self.image.paragraphStyle = paragraphStyle
+#endif
+        }
+    }
 
     // MARK: - Initializer
     public init(font: CDFont = CDFont.systemFont(ofSize: 12),
