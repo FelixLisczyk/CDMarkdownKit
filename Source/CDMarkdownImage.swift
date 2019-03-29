@@ -27,8 +27,10 @@
 
 #if os(iOS) || os(tvOS) || os(watchOS)
     import UIKit
+    import MobileCoreServices
 #elseif os(macOS)
     import Cocoa
+    import CoreServices
 #endif
 
 open class CDMarkdownImage: CDMarkdownLinkElement {
@@ -93,21 +95,15 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
 
         // load image
         #if os(iOS) || os(macOS) || os(tvOS)
-        let textAttachment = NSTextAttachment()
-        if let url = URL(string: linkURLString) {
-            let data = try? Data(contentsOf: url)
-            // Try to load image from url
-            if let data = data,
-                let image = CDImage(data: data) {
-                textAttachment.image = image
-                adjustTextAttachmentSize(textAttachment,
-                                         forImage: image)
-            // Try to load image from local file store
-            } else if let image = CDImage(named: url.path) {
-                textAttachment.image = image
-                adjustTextAttachmentSize(textAttachment,
-                                         forImage: image)
+        let textAttachment: NSTextAttachment
+        if let url = URL(string: linkURLString),
+            let data = try? Data(contentsOf: url) {
+            textAttachment = NSTextAttachment(data: data, ofType: String(kUTTypeImage))
+            if let image = textAttachment.image {
+                self.adjustTextAttachmentSize(textAttachment, forImage: image)
             }
+        } else {
+            textAttachment = NSTextAttachment()
         }
         #endif
 
