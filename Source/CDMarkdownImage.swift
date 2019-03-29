@@ -25,13 +25,11 @@
 //  THE SOFTWARE.
 //
 
-#if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS) || os(watchOS)
     import UIKit
 #elseif os(macOS)
     import Cocoa
 #endif
-
-#if os(iOS) || os(macOS) || os(tvOS)
 
 open class CDMarkdownImage: CDMarkdownLinkElement {
 
@@ -94,6 +92,7 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
                                                       length: linkRange.length + 2))
 
         // load image
+        #if os(iOS) || os(macOS) || os(tvOS)
         let textAttachment = NSTextAttachment()
         if let url = URL(string: linkURLString) {
             let data = try? Data(contentsOf: url)
@@ -110,9 +109,14 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
                                          forImage: image)
             }
         }
+        #endif
 
         // replace text with image
+        #if os(iOS) || os(macOS) || os(tvOS)
         let textAttachmentAttributedString = NSAttributedString(attachment: textAttachment)
+        #elseif os(watchOS)
+        let textAttachmentAttributedString = NSAttributedString()
+        #endif
         attributedString.replaceCharacters(in: NSRange(location: match.range.location,
                                                        length: linkStartInResult - match.range.location - 1),
                                            with: textAttachmentAttributedString)
@@ -135,6 +139,8 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
                                        range: range)
     }
 
+    #if os(iOS) || os(macOS) || os(tvOS)
+    // NSTextAttachment is not (yet) supported on watchOS
     private func adjustTextAttachmentSize(_ textAttachment: NSTextAttachment,
                                           forImage image: CDImage) {
         guard let size = size else { return }
@@ -148,6 +154,5 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
                                        width: image.size.width / widthScalingFactor,
                                        height: image.size.height / widthScalingFactor)
     }
+    #endif
 }
-
-#endif

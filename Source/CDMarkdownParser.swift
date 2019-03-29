@@ -50,9 +50,7 @@ open class CDMarkdownParser {
     public let italic: CDMarkdownItalic
     public let code: CDMarkdownCode
     public let syntax: CDMarkdownSyntax
-#if os(iOS) || os(macOS) || os(tvOS)
     public let image: CDMarkdownImage
-#endif
 
     // MARK: - Escaping Elements
     fileprivate var codeEscaping = CDMarkdownCodeEscaping()
@@ -75,9 +73,7 @@ open class CDMarkdownParser {
             self.italic.font = font
             self.code.font = font
             self.syntax.font = font
-#if os(iOS) || os(macOS) || os(tvOS)
             self.image.font = font
-#endif
         }
     }
 
@@ -92,9 +88,7 @@ open class CDMarkdownParser {
             self.italic.color = fontColor
             self.code.color = fontColor
             self.syntax.color = fontColor
-#if os(iOS) || os(macOS) || os(tvOS)
             self.image.color = fontColor
-#endif
         }
     }
 
@@ -109,9 +103,7 @@ open class CDMarkdownParser {
             self.italic.backgroundColor = backgroundColor
             self.code.backgroundColor = backgroundColor
             self.syntax.backgroundColor = backgroundColor
-#if os(iOS) || os(macOS) || os(tvOS)
             self.image.backgroundColor = backgroundColor
-#endif
         }
     }
 
@@ -126,9 +118,7 @@ open class CDMarkdownParser {
             self.italic.paragraphStyle = paragraphStyle
             self.code.paragraphStyle = paragraphStyle
             self.syntax.paragraphStyle = paragraphStyle
-#if os(iOS) || os(macOS) || os(tvOS)
             self.image.paragraphStyle = paragraphStyle
-#endif
         }
     }
 
@@ -193,21 +183,15 @@ open class CDMarkdownParser {
                                   color: fontColor,
                                   backgroundColor: backgroundColor,
                                   paragraphStyle: paragraphStyle)
-#if os(iOS) || os(macOS) || os(tvOS)
         image = CDMarkdownImage(font: font,
                                 color: fontColor,
                                 backgroundColor: backgroundColor,
                                 paragraphStyle: paragraphStyle,
                                 size: imageSize)
-#endif
 
         self.automaticLinkDetectionEnabled = automaticLinkDetectionEnabled
         self.escapingElements = []
-#if os(iOS) || os(macOS) || os(tvOS)
-        self.defaultElements = [header, list, bold, italic]
-#else
-        self.defaultElements = [header, list, bold, italic]
-#endif
+        self.defaultElements = [header, list, bold, italic, image]
         self.unescapingElements = []
         self.customElements = customElements
     }
