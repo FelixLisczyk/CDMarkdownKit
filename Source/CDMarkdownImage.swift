@@ -27,10 +27,8 @@
 
 #if os(iOS) || os(tvOS) || os(watchOS)
     import UIKit
-    import MobileCoreServices
 #elseif os(macOS)
     import Cocoa
-    import CoreServices
 #endif
 
 open class CDMarkdownImage: CDMarkdownLinkElement {
@@ -46,6 +44,8 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     open var regex: String {
         return CDMarkdownImage.regex
     }
+
+    var delegate: CDMarkdownImageDelegate?
 
     open func regularExpression() throws -> NSRegularExpression {
         return try NSRegularExpression(pattern: regex,
@@ -97,8 +97,8 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
         #if os(iOS) || os(macOS) || os(tvOS)
         let textAttachment: NSTextAttachment
         if let url = URL(string: linkURLString),
-            let data = try? Data(contentsOf: url) {
-            textAttachment = NSTextAttachment(data: data, ofType: String(kUTTypeImage))
+            let customTextAttachment = self.delegate?.textAttachment(for: url) {
+            textAttachment = customTextAttachment
             if let image = textAttachment.image {
                 self.adjustTextAttachmentSize(textAttachment, forImage: image)
             }

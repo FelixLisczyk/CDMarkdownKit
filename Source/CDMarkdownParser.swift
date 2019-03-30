@@ -248,4 +248,8 @@ open class CDMarkdownParser {
         }
         return attributedString
     }
+
+    public func setImageDelegate(_ imageDelegate: CDMarkdownImageDelegate) {
+        self.image.delegate = imageDelegate
+    }
 }
