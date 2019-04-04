@@ -118,7 +118,7 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
                                            with: textAttachmentAttributedString)
 
         let formatRange = NSRange(location: match.range.location,
-                                  length: 0)
+                                  length: 1)
 
         formatText(attributedString,
                    range: formatRange,
