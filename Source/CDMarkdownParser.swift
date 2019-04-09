@@ -122,6 +122,12 @@ open class CDMarkdownParser {
         }
     }
 
+    open var preferredImageSize: CGSize? {
+        didSet {
+            self.image.size = preferredImageSize
+        }
+    }
+
     // MARK: - Initializer
     public init(font: CDFont = CDFont.systemFont(ofSize: 12),
                 boldFont: CDFont? = nil,
@@ -144,6 +150,7 @@ open class CDMarkdownParser {
             paragraphStyle.lineSpacing = 1.38
             self.paragraphStyle = paragraphStyle
         }
+        self.preferredImageSize = imageSize
 
         header = CDMarkdownHeader(font: font,
                                   color: fontColor,
