@@ -117,6 +117,7 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
                                                        length: linkStartInResult - match.range.location - 1),
                                            with: textAttachmentAttributedString)
 
+        #if os(iOS) || os(macOS) || os(tvOS)
         let formatRange = NSRange(location: match.range.location,
                                   length: 1)
 
@@ -126,6 +127,7 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
         addAttributes(attributedString,
                       range: formatRange,
                       link: linkURLString)
+        #endif
     }
 
     open func addAttributes(_ attributedString: NSMutableAttributedString,
