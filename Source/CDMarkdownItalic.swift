@@ -64,4 +64,33 @@ open class CDMarkdownItalic: CDMarkdownCommonElement {
         self.backgroundColor = backgroundColor
         self.paragraphStyle = paragraphStyle
     }
+
+    public func match(_ match: NSTextCheckingResult, attributedString: NSMutableAttributedString) {
+
+        // Italic formatting can conflict with bullet lists if the list element is disabled or called afterwards.
+        // Example: * Hello *World will be converted into (Italic)Hello (Normal)World
+        //
+        // This condition checks if the matched substring starts with '* '
+        // and if it is either the beginning of the string or the beginning of a new line.
+        //
+        // If both conditions are true, the asterisk indicates a list element and the substitution will be skipped.
+        let matchedText = attributedString.attributedSubstring(from: match.range).string
+        if matchedText.starts(with: "* ") &&
+            match.range.location == 0 || attributedString.string[match.range.location - 1] == "\n" {
+            return
+        }
+
+        // deleting trailing markdown
+        attributedString.deleteCharacters(in: match.nsRange(atIndex: 4))
+        // formatting string (may alter the length)
+        addAttributes(attributedString, range: match.nsRange(atIndex: 3))
+        // deleting leading markdown
+        attributedString.deleteCharacters(in: match.nsRange(atIndex: 2))
+    }
+}
+
+private extension String {
+    subscript(i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
 }
