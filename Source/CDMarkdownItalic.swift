@@ -75,8 +75,8 @@ open class CDMarkdownItalic: CDMarkdownCommonElement {
         //
         // If both conditions are true, the asterisk indicates a list element and the substitution will be skipped.
         let matchedText = attributedString.attributedSubstring(from: match.range).string
-        if matchedText.starts(with: "* ") &&
-            match.range.location == 0 || attributedString.string[match.range.location - 1] == "\n" {
+        if matchedText.starts(with: "* "),
+            (match.range.location == 0 || attributedString.string[match.range.location - 1] == "\n") {
             return
         }
 
