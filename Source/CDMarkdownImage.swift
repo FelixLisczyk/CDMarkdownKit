@@ -141,10 +141,18 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     // NSTextAttachment is not (yet) supported on watchOS
     private func adjustTextAttachmentSize(_ textAttachment: NSTextAttachment,
                                           forImage image: CDImage) {
-        guard let size = size else { return }
 
-        // add padding to image
-        let preferredWidth = size.width - 10
+        var preferredWidth: CGFloat
+        
+        // Check if the image width exceeds the width of the view
+        if let size = size,
+            size.width <= image.size.width {
+            // add padding to image
+            preferredWidth = size.width - 10
+        } else {
+            preferredWidth = image.size.width
+        }
+
         let widthScalingFactor = image.size.width / preferredWidth
 
         textAttachment.bounds = CGRect(x: 0,
