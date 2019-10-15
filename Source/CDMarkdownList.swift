@@ -81,8 +81,9 @@ open class CDMarkdownList: CDMarkdownLevelElement {
             return "\(string)\(separator)"
         }
         string = "\(string)\(indicator) "
-        attributedString.replaceCharacters(in: range,
-                                           with: string)
+
+        let newAttributedString = NSAttributedString(string: string, attributes: attributesForLevel(level-1))
+        attributedString.replaceCharacters(in: range, with: newAttributedString)
     }
 
     open func addFullAttributes(_ attributedString: NSMutableAttributedString,
@@ -102,7 +103,6 @@ open class CDMarkdownList: CDMarkdownLevelElement {
     open func addAttributes(_ attributedString: NSMutableAttributedString,
                             range: NSRange,
                             level: Int) {
-        attributedString.addAttributes(attributesForLevel(level-1),
-                                       range: range)
+        // Don't add attributes to the text after the bullet point
     }
 }
