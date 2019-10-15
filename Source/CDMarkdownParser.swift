@@ -242,8 +242,8 @@ open class CDMarkdownParser {
                                            toRange: range)
 
         var elements: [CDMarkdownElement] = escapingElements
-        elements.append(contentsOf: defaultElements)
         elements.append(contentsOf: customElements)
+        elements.append(contentsOf: defaultElements)
         elements.append(contentsOf: unescapingElements)
         elements.forEach { element in
             if automaticListConversion == false && type(of: element) == CDMarkdownList.self {
