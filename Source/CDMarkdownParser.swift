@@ -79,13 +79,10 @@ open class CDMarkdownParser {
 
     open var fontColor: CDColor {
         didSet {
-            self.header.color = fontColor
             self.list.color = fontColor
             self.quote.color = fontColor
             self.link.color = fontColor
             self.automaticLink.color = fontColor
-            self.bold.color = fontColor
-            self.italic.color = fontColor
             self.code.color = fontColor
             self.syntax.color = fontColor
             self.image.color = fontColor
@@ -94,13 +91,10 @@ open class CDMarkdownParser {
 
     open var backgroundColor: CDColor {
         didSet {
-            self.header.backgroundColor = backgroundColor
             self.list.backgroundColor = backgroundColor
             self.quote.backgroundColor = backgroundColor
             self.link.backgroundColor = backgroundColor
             self.automaticLink.backgroundColor = backgroundColor
-            self.bold.backgroundColor = backgroundColor
-            self.italic.backgroundColor = backgroundColor
             self.code.backgroundColor = backgroundColor
             self.syntax.backgroundColor = backgroundColor
             self.image.backgroundColor = backgroundColor
@@ -153,8 +147,8 @@ open class CDMarkdownParser {
         self.preferredImageSize = imageSize
 
         header = CDMarkdownHeader(font: font,
-                                  color: fontColor,
-                                  backgroundColor: backgroundColor,
+                                  color: nil,
+                                  backgroundColor: nil,
                                   paragraphStyle: paragraphStyle)
         list = CDMarkdownList(font: font,
                               color: fontColor,
@@ -174,13 +168,13 @@ open class CDMarkdownParser {
                                                 paragraphStyle: paragraphStyle)
         bold = CDMarkdownBold(font: font,
                               customBoldFont: boldFont,
-                              color: fontColor,
-                              backgroundColor: backgroundColor,
+                              color: nil,
+                              backgroundColor: nil,
                               paragraphStyle: paragraphStyle)
         italic = CDMarkdownItalic(font: font,
                                   customItalicFont: italicFont,
-                                  color: fontColor,
-                                  backgroundColor: backgroundColor,
+                                  color: nil,
+                                  backgroundColor: nil,
                                   paragraphStyle: paragraphStyle)
         code = CDMarkdownCode(font: font,
                               color: fontColor,
