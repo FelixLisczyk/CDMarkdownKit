@@ -80,12 +80,14 @@ open class CDMarkdownItalic: CDMarkdownCommonElement {
             return
         }
 
-        // deleting trailing markdown
-        attributedString.deleteCharacters(in: match.nsRange(atIndex: 4))
-        // formatting string (may alter the length)
-        addAttributes(attributedString, range: match.nsRange(atIndex: 3))
-        // deleting leading markdown
-        attributedString.deleteCharacters(in: match.nsRange(atIndex: 2))
+        if self.shouldMatch(match, in: attributedString) {
+            // deleting trailing markdown
+            attributedString.deleteCharacters(in: match.nsRange(atIndex: 4))
+            // formatting string (may alter the length)
+            addAttributes(attributedString, range: match.nsRange(atIndex: 3))
+            // deleting leading markdown
+            attributedString.deleteCharacters(in: match.nsRange(atIndex: 2))
+        }
     }
 }
 

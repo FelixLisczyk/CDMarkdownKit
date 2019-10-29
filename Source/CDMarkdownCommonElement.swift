@@ -53,11 +53,37 @@ public extension CDMarkdownCommonElement {
     }
 
     func match(_ match: NSTextCheckingResult, attributedString: NSMutableAttributedString) {
-        // deleting trailing markdown
-        attributedString.deleteCharacters(in: match.nsRange(atIndex: 4))
-        // formatting string (may alter the length)
-        addAttributes(attributedString, range: match.nsRange(atIndex: 3))
-        // deleting leading markdown
-        attributedString.deleteCharacters(in: match.nsRange(atIndex: 2))
+        if self.shouldMatch(match, in: attributedString) {
+            // deleting trailing markdown
+            attributedString.deleteCharacters(in: match.nsRange(atIndex: 4))
+            // formatting string (may alter the length)
+            addAttributes(attributedString, range: match.nsRange(atIndex: 3))
+            // deleting leading markdown
+            attributedString.deleteCharacters(in: match.nsRange(atIndex: 2))
+        }
+    }
+
+    func shouldMatch(_ match: NSTextCheckingResult, in attributedString: NSMutableAttributedString) -> Bool {
+        let trailingRange = match.nsRange(atIndex: 4)
+        let leadingRange = match.nsRange(atIndex: 2)
+
+        if self.hasEscapeCharacter(before: leadingRange, in: attributedString) ||
+            self.hasEscapeCharacter(before: trailingRange, in: attributedString) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    private func hasEscapeCharacter(before range: NSRange, in attributedString: NSAttributedString) -> Bool {
+        let string = attributedString.string as NSString
+        let indexBeforeRange = range.location - 1
+        guard indexBeforeRange >= 0 && indexBeforeRange < attributedString.length else { return false }
+
+        if let unicodeScalar = UnicodeScalar(string.character(at: indexBeforeRange)) {
+            return Character(unicodeScalar) == "\\"
+        } else {
+            return false
+        }
     }
 }
