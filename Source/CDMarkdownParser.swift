@@ -217,6 +217,23 @@ open class CDMarkdownParser {
     }
 
     open func parse(_ markdown: NSAttributedString) -> NSAttributedString {
+        var elements: [CDMarkdownElement] = escapingElements
+        elements.append(contentsOf: customElements)
+        elements.append(contentsOf: defaultElements)
+        elements.append(contentsOf: unescapingElements)
+
+        return self.parse(markdown, with: elements)
+    }
+
+    open func parseImages(_ markdown: NSAttributedString) -> NSAttributedString {
+        return self.parse(markdown, with: [self.image])
+    }
+
+    public func setImageDelegate(_ imageDelegate: CDMarkdownImageDelegate) {
+        self.image.delegate = imageDelegate
+    }
+
+    private func parse(_ markdown: NSAttributedString, with elements: [CDMarkdownElement]) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(attributedString: markdown)
         let mutableString = attributedString.mutableString
         mutableString.replaceOccurrences(of: "&nbsp;",
@@ -235,10 +252,6 @@ open class CDMarkdownParser {
         attributedString.addParagraphStyle(paragraphStyle,
                                            toRange: range)
 
-        var elements: [CDMarkdownElement] = escapingElements
-        elements.append(contentsOf: customElements)
-        elements.append(contentsOf: defaultElements)
-        elements.append(contentsOf: unescapingElements)
         elements.forEach { element in
             if automaticListConversion == false && type(of: element) == CDMarkdownList.self {
                 return
@@ -247,10 +260,7 @@ open class CDMarkdownParser {
                 element.parse(attributedString)
             }
         }
-        return attributedString
-    }
 
-    public func setImageDelegate(_ imageDelegate: CDMarkdownImageDelegate) {
-        self.image.delegate = imageDelegate
+        return attributedString
     }
 }
