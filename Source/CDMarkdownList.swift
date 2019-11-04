@@ -33,7 +33,7 @@
 
 open class CDMarkdownList: CDMarkdownLevelElement {
 
-    fileprivate static let regex = "^(\\*{1,%@})[\\s\\t]{1}(.*)$"
+    fileprivate static let regex = "^(\\*{1,%@})[ \\t]{1}(.*)$"
 
     open var maxLevel: Int
     open var font: CDFont?
