@@ -83,7 +83,7 @@ open class CDMarkdownList: CDMarkdownLevelElement {
         bulletPoint = "\(bulletPoint)\(indicator) "
 
         let newAttributedString = NSMutableAttributedString(string: bulletPoint, attributes: attributesForLevel(level-1))
-        newAttributedString.addParagraphStyle(self.paragraphStyle(atLevel: level), toRange: range)
+        newAttributedString.addParagraphStyle(self.paragraphStyle(atLevel: level), toRange: .init(location: 0, length: newAttributedString.length))
         attributedString.replaceCharacters(in: range, with: newAttributedString)
     }
 
