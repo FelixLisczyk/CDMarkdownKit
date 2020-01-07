@@ -77,32 +77,39 @@ open class CDMarkdownList: CDMarkdownLevelElement {
     open func formatText(_ attributedString: NSMutableAttributedString,
                          range: NSRange,
                          level: Int) {
-        var string = (0..<level).reduce("") { (string, _) -> String in
+        var bulletPoint = (0..<level).reduce("") { (string, _) -> String in
             return "\(string)\(separator)"
         }
-        string = "\(string)\(indicator) "
+        bulletPoint = "\(bulletPoint)\(indicator) "
 
-        let newAttributedString = NSAttributedString(string: string, attributes: attributesForLevel(level-1))
+        let newAttributedString = NSMutableAttributedString(string: bulletPoint, attributes: attributesForLevel(level-1))
+        newAttributedString.addParagraphStyle(self.paragraphStyle(atLevel: level), toRange: range)
         attributedString.replaceCharacters(in: range, with: newAttributedString)
     }
 
     open func addFullAttributes(_ attributedString: NSMutableAttributedString,
                                 range: NSRange,
                                 level: Int) {
-        let indicatorSize = "\(indicator) ".sizeWithAttributes(attributes)
-        let separatorSize = separator.sizeWithAttributes(attributes)
-        let floatLevel = CGFloat(level)
-        guard let paragraphStyle = self.paragraphStyle else { return }
-        let updatedParagraphStyle = paragraphStyle.mutableCopy() as? NSMutableParagraphStyle ?? NSMutableParagraphStyle()
-        updatedParagraphStyle.headIndent = indicatorSize.width + (separatorSize.width * floatLevel)
-
-        attributedString.addParagraphStyle(updatedParagraphStyle,
-                                           toRange: range)
+        attributedString.addParagraphStyle(self.paragraphStyle(atLevel: level), toRange: range)
     }
 
     open func addAttributes(_ attributedString: NSMutableAttributedString,
                             range: NSRange,
                             level: Int) {
         // Don't add attributes to the text after the bullet point
+    }
+
+    private func paragraphStyle(atLevel level: Int) -> NSParagraphStyle {
+        let indicatorSize = "\(indicator) ".sizeWithAttributes(attributes)
+        let separatorSize = separator.sizeWithAttributes(attributes)
+        let floatLevel = CGFloat(level)
+        if let paragraphStyle = self.paragraphStyle {
+            let updatedParagraphStyle = paragraphStyle.mutableCopy() as? NSMutableParagraphStyle ?? NSMutableParagraphStyle()
+            updatedParagraphStyle.headIndent = indicatorSize.width + (separatorSize.width * floatLevel)
+            return updatedParagraphStyle
+        }
+        else {
+            return .init()
+        }
     }
 }
