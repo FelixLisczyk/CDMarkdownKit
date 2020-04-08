@@ -33,7 +33,7 @@
 
 open class CDMarkdownHeader: CDMarkdownLevelElement {
 
-    fileprivate static let regex = "^\\s*(#{1,%@})\\s*(.+)$\n*"
+    fileprivate static let regex = "^(#{1,%@}) ([^#\n]+)$"
     fileprivate struct CDMarkdownHeadingHashes {
         static let one   = 9
         static let two   = 5
