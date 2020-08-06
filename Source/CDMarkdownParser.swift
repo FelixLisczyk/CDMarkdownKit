@@ -192,7 +192,7 @@ open class CDMarkdownParser {
 
         self.automaticLinkDetectionEnabled = automaticLinkDetectionEnabled
         self.escapingElements = []
-        self.defaultElements = [header, list, bold, italic, image]
+        self.defaultElements = [header, list, link, bold, italic, image]
         self.unescapingElements = []
         self.customElements = customElements
     }
