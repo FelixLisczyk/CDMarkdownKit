@@ -104,9 +104,10 @@ internal extension NSMutableAttributedString {
     func addLink(_ link: URL,
                  toRange range: NSRange) {
 #if swift(>=4.2)
-        self.addAttribute(NSAttributedString.Key.link,
-                          value: link,
-                          range: range)
+        self.addAttributes([
+            .link: link,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ], range: range)
 #elseif swift(>=4.0)
         self.addAttribute(NSAttributedStringKey.link,
                           value: link,
