@@ -33,7 +33,7 @@
 
 open class CDMarkdownLink: CDMarkdownLinkElement {
 
-    fileprivate static let regex = "[^!{1}]\\[([^\\[]*?)\\]\\(([^\\)]*)\\)"
+    fileprivate static let regex = "\\[([^\\[]*?)\\]\\(([^\\)]*)\\)"
 
     open var font: CDFont?
     open var color: CDColor?
@@ -76,26 +76,20 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
                     attributedString: NSMutableAttributedString) {
         guard match.numberOfRanges == 3 else { return }
 
-        let nsString = attributedString.string as NSString
-        let linkStartInResult = nsString.range(of: "(",
-                                               options: .backwards,
-                                               range: match.range).location
-        let linkRange = NSRange(location: linkStartInResult,
-                                length: match.range.length + match.range.location - linkStartInResult - 1)
-        let linkURLString = nsString.substring(with: NSRange(location: linkRange.location + 1,
-                                                             length: linkRange.length - 1))
+        let markdownRange = match.range(at: 0)
+        let linkTextRange = match.range(at: 1)
+        let linkURLString = attributedString.attributedSubstring(from: match.range(at: 2)).string
 
-        // deleting trailing markdown
-        // needs to be called before formattingBlock to support modification of length
-        attributedString.deleteCharacters(in: NSRange(location: linkRange.location - 1,
-                                                      length: linkRange.length + 2))
+        // Deleting trailing markdown
+        let trailingMarkdownRange = NSRange(location: linkTextRange.upperBound, length: markdownRange.upperBound - linkTextRange.upperBound)
+        attributedString.deleteCharacters(in: trailingMarkdownRange)
 
-        // deleting leading markdown
-        // needs to be called before formattingBlock to provide a stable range
-        attributedString.deleteCharacters(in: NSRange(location: match.range.location + 1,
-                                                      length: 1))
-        let formatRange = NSRange(location: match.range.location + 1,
-                                  length: linkStartInResult - match.range.location - 3)
+        // Deleting leading markdown
+        let leadingMarkdownRange = NSRange(location: markdownRange.location, length: linkTextRange.location - markdownRange.location)
+        attributedString.deleteCharacters(in: leadingMarkdownRange)
+
+        // Adjust the range for the deleted leading markdown character(s)
+        let formatRange = NSRange(location: linkTextRange.location - leadingMarkdownRange.length, length: linkTextRange.length)
 
         formatText(attributedString,
                    range: formatRange,
