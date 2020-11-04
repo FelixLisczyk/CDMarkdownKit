@@ -38,7 +38,8 @@ open class CDMarkdownParser {
     fileprivate var defaultElements: [CDMarkdownElement]
     fileprivate var unescapingElements: [CDMarkdownElement]
 
-    open var customElements: [CDMarkdownElement]
+    open var preCustomElements: [CDMarkdownElement]
+    open var postCustomElements: [CDMarkdownElement]
 
     // MARK: - Basic Elements
     public let header: CDMarkdownHeader
@@ -131,7 +132,8 @@ open class CDMarkdownParser {
                 paragraphStyle: NSParagraphStyle? = nil,
                 imageSize: CGSize? = nil,
                 automaticLinkDetectionEnabled: Bool = true,
-                customElements: [CDMarkdownElement] = []) {
+                preCustomElements: [CDMarkdownElement] = [],
+                postCustomElements: [CDMarkdownElement] = []) {
         self.font = font
         self.fontColor = fontColor
         self.backgroundColor = backgroundColor
@@ -194,21 +196,8 @@ open class CDMarkdownParser {
         self.escapingElements = []
         self.defaultElements = [header, list, bold, italic, image, link]
         self.unescapingElements = []
-        self.customElements = customElements
-    }
-
-    // MARK: - Element Extensibility
-    open func addCustomElement(_ element: CDMarkdownElement) {
-        customElements.append(element)
-    }
-
-    open func removeCustomElement(_ element: CDMarkdownElement) {
-        guard let index = customElements.firstIndex(where: { someElement -> Bool in
-            return element === someElement
-        }) else {
-            return
-        }
-        customElements.remove(at: index)
+        self.preCustomElements = preCustomElements
+        self.postCustomElements = postCustomElements
     }
 
     // MARK: - Parsing
@@ -218,9 +207,10 @@ open class CDMarkdownParser {
 
     open func parse(_ markdown: NSAttributedString) -> NSAttributedString {
         var elements: [CDMarkdownElement] = escapingElements
-        elements.append(contentsOf: customElements)
+        elements.append(contentsOf: preCustomElements)
         elements.append(contentsOf: defaultElements)
         elements.append(contentsOf: unescapingElements)
+        elements.append(contentsOf: postCustomElements)
 
         return self.parse(markdown, with: elements)
     }
