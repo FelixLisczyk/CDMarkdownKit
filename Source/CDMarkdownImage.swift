@@ -142,23 +142,40 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     private func adjustTextAttachmentSize(_ textAttachment: NSTextAttachment,
                                           forImage image: CDImage) {
 
-        var preferredWidth: CGFloat
-        
-        // Check if the image width exceeds the width of the view
-        if let size = size,
-            size.width <= image.size.width {
-            // add padding to image
-            preferredWidth = size.width - 10
-        } else {
-            preferredWidth = image.size.width
-        }
+        let scalingFactor: CGFloat
 
-        let widthScalingFactor = image.size.width / preferredWidth
+        if image.size.width >= image.size.height {
+            var preferredWidth: CGFloat
+
+            // Check if the image width exceeds the width of the view
+            if let size = size,
+               size.width <= image.size.width {
+                // add padding to image
+                preferredWidth = size.width - 10
+            } else {
+                preferredWidth = image.size.width
+            }
+
+            scalingFactor = image.size.width / preferredWidth
+        } else {
+            var preferredHeight: CGFloat
+
+            // Check if the image height exceeds the height of the view
+            if let size = size,
+               size.height <= image.size.height {
+                // add padding to image
+                preferredHeight = size.height - 10
+            } else {
+                preferredHeight = image.size.height
+            }
+
+            scalingFactor = image.size.height / preferredHeight
+        }
 
         textAttachment.bounds = CGRect(x: 0,
                                        y: 0,
-                                       width: image.size.width / widthScalingFactor,
-                                       height: image.size.height / widthScalingFactor)
+                                       width: image.size.width / scalingFactor,
+                                       height: image.size.height / scalingFactor)
     }
     #endif
 }
