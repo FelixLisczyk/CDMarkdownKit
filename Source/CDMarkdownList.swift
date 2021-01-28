@@ -51,7 +51,7 @@ open class CDMarkdownList: CDMarkdownLevelElement {
 
     public init(font: CDFont? = nil,
                 maxLevel: Int = 0,
-                indicator: String = "•",
+                indicator: String = "○",
                 separator: String = "  ",
                 color: CDColor? = nil,
                 backgroundColor: CDColor? = nil,
@@ -80,7 +80,7 @@ open class CDMarkdownList: CDMarkdownLevelElement {
         var bulletPoint = (0..<level).reduce("") { (string, _) -> String in
             return "\(string)\(separator)"
         }
-        bulletPoint = "\(bulletPoint)\(indicator) "
+        bulletPoint = "\(bulletPoint)\(indicator)  "
 
         let newAttributedString = NSMutableAttributedString(string: bulletPoint, attributes: attributesForLevel(level-1))
         newAttributedString.addParagraphStyle(self.paragraphStyle(atLevel: level), toRange: .init(location: 0, length: newAttributedString.length))
