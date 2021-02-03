@@ -35,6 +35,8 @@ open class CDMarkdownList: CDMarkdownLevelElement {
 
     fileprivate static let regex = "^(\\*{1,%@})[ \\t]{1}(.*)$"
 
+    private let indicatorTextSpacing: String = "  "
+
     open var maxLevel: Int
     open var font: CDFont?
     open var color: CDColor?
@@ -80,7 +82,7 @@ open class CDMarkdownList: CDMarkdownLevelElement {
         var bulletPoint = (0..<level).reduce("") { (string, _) -> String in
             return "\(string)\(separator)"
         }
-        bulletPoint = "\(bulletPoint)\(indicator)  "
+        bulletPoint = "\(bulletPoint)\(indicator)\(indicatorTextSpacing)"
 
         let newAttributedString = NSMutableAttributedString(string: bulletPoint, attributes: attributesForLevel(level-1))
         newAttributedString.addParagraphStyle(self.paragraphStyle(atLevel: level), toRange: .init(location: 0, length: newAttributedString.length))
@@ -100,7 +102,7 @@ open class CDMarkdownList: CDMarkdownLevelElement {
     }
 
     private func paragraphStyle(atLevel level: Int) -> NSParagraphStyle {
-        let indicatorSize = "\(indicator) ".sizeWithAttributes(attributes)
+        let indicatorSize = "\(indicator)\(indicatorTextSpacing)".sizeWithAttributes(attributes)
         let separatorSize = separator.sizeWithAttributes(attributes)
         let floatLevel = CGFloat(level)
         if let paragraphStyle = self.paragraphStyle {
