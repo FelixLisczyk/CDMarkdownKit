@@ -80,6 +80,7 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
         let linkTextRange = match.range(at: 1)
         let linkURLString = attributedString.attributedSubstring(from: match.range(at: 2)).string
 
+        #if os(iOS) || os(macOS) || os(tvOS)
         // Deleting trailing markdown
         let trailingMarkdownRange = NSRange(location: linkTextRange.upperBound, length: markdownRange.upperBound - linkTextRange.upperBound)
         attributedString.deleteCharacters(in: trailingMarkdownRange)
@@ -97,6 +98,7 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
         addAttributes(attributedString,
                       range: formatRange,
                       link: linkURLString)
+        #endif
     }
 
     open func addAttributes(_ attributedString: NSMutableAttributedString,

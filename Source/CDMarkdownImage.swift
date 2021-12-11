@@ -90,8 +90,10 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
 
         // deleting trailing markdown
         // needs to be called before formattingBlock to support modification of length
+        #if os(iOS) || os(macOS) || os(tvOS)
         attributedString.deleteCharacters(in: NSRange(location: match.range.location,
                                                       length: linkRange.length + 2))
+        #endif
 
         // load image
         #if os(iOS) || os(macOS) || os(tvOS)
@@ -110,12 +112,10 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
         // replace text with image
         #if os(iOS) || os(macOS) || os(tvOS)
         let textAttachmentAttributedString = NSAttributedString(attachment: textAttachment)
-        #elseif os(watchOS)
-        let textAttachmentAttributedString = NSAttributedString()
-        #endif
         attributedString.replaceCharacters(in: NSRange(location: match.range.location,
                                                        length: linkStartInResult - match.range.location - 1),
                                            with: textAttachmentAttributedString)
+        #endif
 
         #if os(iOS) || os(macOS) || os(tvOS)
         let formatRange = NSRange(location: match.range.location,
