@@ -142,11 +142,17 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     private func adjustTextAttachmentSize(_ textAttachment: NSTextAttachment,
                                           forImage image: CDImage) {
 
-        guard let targetSize = self.size else {
+        guard var targetSize = self.size else {
             return
         }
-
+        
         let imageSize = image.size
+        
+        // Don't scale images beyond their original size
+        targetSize = CGSize(
+            width: min(imageSize.width, targetSize.width),
+            height: min(imageSize.height, targetSize.height)
+        )
 
         let widthRatio  = targetSize.width  / imageSize.width
         let heightRatio = targetSize.height / imageSize.height
