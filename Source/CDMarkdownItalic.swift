@@ -94,15 +94,15 @@ open class CDMarkdownItalic: CDMarkdownCommonElement {
         if index == 0 {
             return true
         } else if index > 0, index < attributedString.length {
-            return attributedString.string[index - 1]  == "\n"
+            return (attributedString.string as NSString)[index - 1]  == "\n"
         } else {
             return false
         }
     }
 }
 
-private extension String {
-    subscript(i: Int) -> Character {
-        return self[index(startIndex, offsetBy: i)]
+private extension NSString {
+    subscript(i: Int) -> String {
+        return substring(with: .init(location: i, length: 1))
     }
 }
