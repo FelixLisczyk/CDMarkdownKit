@@ -145,9 +145,9 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
         guard var targetSize = self.size else {
             return
         }
-        
+
         let imageSize = image.size
-        
+
         // Don't scale images beyond their original size
         targetSize = CGSize(
             width: min(imageSize.width, targetSize.width),
@@ -165,6 +165,50 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
         }
 
         textAttachment.bounds = .init(origin: .zero, size: newSize)
+
+        // Resize the image to match the text attachment in order to save memory space.
+        textAttachment.image = textAttachment.image?.withSize(newSize)
     }
     #endif
 }
+
+#if os(iOS) || os(macOS) || os(tvOS)
+private extension CDImage {
+    func withSize(_ newSize: CGSize) -> CDImage {
+        guard Thread.isMainThread else { return self }
+        #if os(iOS) || os(tvOS)
+            let image = UIGraphicsImageRenderer(size: newSize).image { _ in
+                draw(in: CGRect(origin: .zero, size: newSize))
+            }
+            return image.withRenderingMode(renderingMode)
+        #elseif os(macOS)
+            guard let bitmap = NSBitmapImageRep(
+                bitmapDataPlanes: nil,
+                pixelsWide: Int(newSize.width),
+                pixelsHigh: Int(newSize.height),
+                bitsPerSample: 8,
+                samplesPerPixel: 4,
+                hasAlpha: true,
+                isPlanar: false,
+                colorSpaceName: .calibratedRGB,
+                bytesPerRow: 0,
+                bitsPerPixel: 0
+            ) else { return self }
+
+            bitmap.size = newSize
+
+            NSGraphicsContext.saveGraphicsState()
+            NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
+
+            self.draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height), from: .zero, operation: .copy, fraction: 1.0)
+
+            NSGraphicsContext.restoreGraphicsState()
+
+            let newImage = NSImage(size: newSize)
+            newImage.addRepresentation(bitmap)
+
+            return newImage
+        #endif
+    }
+}
+#endif
