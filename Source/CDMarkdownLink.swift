@@ -32,7 +32,6 @@
 #endif
 
 open class CDMarkdownLink: CDMarkdownLinkElement {
-
     fileprivate static let regex = "\\[([^\\[]*?)\\]\\(([^\\)]*)\\)"
 
     open var font: CDFont?
@@ -52,7 +51,8 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
     public init(font: CDFont? = nil,
                 color: CDColor? = CDColor.blue,
                 backgroundColor: CDColor? = nil,
-                paragraphStyle: NSParagraphStyle? = nil) {
+                paragraphStyle: NSParagraphStyle? = nil)
+    {
         self.font = font
         self.color = color
         self.backgroundColor = backgroundColor
@@ -61,10 +61,11 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
 
     open func formatText(_ attributedString: NSMutableAttributedString,
                          range: NSRange,
-                         link: String) {
+                         link: String)
+    {
         guard let encodedLink = link.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)
-            else {
-                return
+        else {
+            return
         }
         guard let url = URL(string: link) ?? URL(string: encodedLink) else { return }
 
@@ -73,14 +74,14 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
     }
 
     open func match(_ match: NSTextCheckingResult,
-                    attributedString: NSMutableAttributedString) {
+                    attributedString: NSMutableAttributedString)
+    {
         guard match.numberOfRanges == 3 else { return }
 
         let markdownRange = match.range(at: 0)
         let linkTextRange = match.range(at: 1)
         let linkURLString = attributedString.attributedSubstring(from: match.range(at: 2)).string
 
-        #if os(iOS) || os(macOS) || os(tvOS)
         // Deleting trailing markdown
         let trailingMarkdownRange = NSRange(location: linkTextRange.upperBound, length: markdownRange.upperBound - linkTextRange.upperBound)
         attributedString.deleteCharacters(in: trailingMarkdownRange)
@@ -98,12 +99,12 @@ open class CDMarkdownLink: CDMarkdownLinkElement {
         addAttributes(attributedString,
                       range: formatRange,
                       link: linkURLString)
-        #endif
     }
 
     open func addAttributes(_ attributedString: NSMutableAttributedString,
                             range: NSRange,
-                            link: String) {
+                            link _: String)
+    {
         attributedString.addAttributes(attributes,
                                        range: range)
     }
