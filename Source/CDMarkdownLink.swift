@@ -32,7 +32,7 @@
 #endif
 
 open class CDMarkdownLink: CDMarkdownLinkElement {
-    fileprivate static let regex = "\\[([^\\[]*?)\\]\\(([^\\)]*)\\)"
+    fileprivate static let regex = #"(?<!!)\[([^\[]*?)\]\(([^\)]*)\)"#
 
     open var font: CDFont?
     open var color: CDColor?
