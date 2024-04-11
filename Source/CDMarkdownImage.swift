@@ -79,54 +79,43 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
 
     open func match(_ match: NSTextCheckingResult,
                     attributedString: NSMutableAttributedString) {
-        let nsString = attributedString.string as NSString
-        let linkStartInResult = nsString.range(of: "(",
-                                               options: .backwards,
-                                               range: match.range).location
-        let linkRange = NSRange(location: linkStartInResult,
-                                length: match.range.length + match.range.location - linkStartInResult - 1)
-        let linkURLString = nsString.substring(with: NSRange(location: linkRange.location + 1,
-                                                             length: linkRange.length - 1))
-
-        // deleting trailing markdown
-        // needs to be called before formattingBlock to support modification of length
         #if os(iOS) || os(macOS) || os(tvOS)
-        attributedString.deleteCharacters(in: NSRange(location: match.range.location,
-                                                      length: linkRange.length + 2))
-        #endif
+            let nsString = attributedString.string as NSString
+            let linkStartInResult = nsString.range(of: "(",
+                                                   options: .backwards,
+                                                   range: match.range).location
+            let linkRange = NSRange(location: linkStartInResult,
+                                    length: match.range.length + match.range.location - linkStartInResult - 1)
+            let linkURLString = nsString.substring(with: NSRange(location: linkRange.location + 1,
+                                                                 length: linkRange.length - 1))
 
-        // load image
-        #if os(iOS) || os(macOS) || os(tvOS)
-        let textAttachment: NSTextAttachment
-        if let url = URL(string: linkURLString),
-            let customTextAttachment = self.delegate?.textAttachment(for: url) {
-            textAttachment = customTextAttachment
-            if let image = textAttachment.image {
-                self.adjustTextAttachmentSize(textAttachment, forImage: image)
-            }
-        } else {
-            textAttachment = NSTextAttachment()
-        }
-        #endif
+            // load image
+            guard let url = URL(string: linkURLString),
+                let textAttachment = self.delegate?.textAttachment(for: url),
+                  let image = textAttachment.image else { return }
 
-        // replace text with image
-        #if os(iOS) || os(macOS) || os(tvOS)
-        let textAttachmentAttributedString = NSAttributedString(attachment: textAttachment)
-        attributedString.replaceCharacters(in: NSRange(location: match.range.location,
-                                                       length: linkStartInResult - match.range.location - 1),
-                                           with: textAttachmentAttributedString)
-        #endif
+            self.adjustTextAttachmentSize(textAttachment, forImage: image)
 
-        #if os(iOS) || os(macOS) || os(tvOS)
-        let formatRange = NSRange(location: match.range.location,
-                                  length: 1)
+            // deleting trailing markdown
+            // needs to be called before formattingBlock to support modification of length
+            attributedString.deleteCharacters(in: NSRange(location: match.range.location,
+                                                          length: linkRange.length + 2))
 
-        formatText(attributedString,
-                   range: formatRange,
-                   link: linkURLString)
-        addAttributes(attributedString,
-                      range: formatRange,
-                      link: linkURLString)
+            // replace text with image
+            let textAttachmentAttributedString = NSAttributedString(attachment: textAttachment)
+            attributedString.replaceCharacters(in: NSRange(location: match.range.location,
+                                                           length: linkStartInResult - match.range.location - 1),
+                                               with: textAttachmentAttributedString)
+
+            let formatRange = NSRange(location: match.range.location,
+                                      length: 1)
+
+            formatText(attributedString,
+                       range: formatRange,
+                       link: linkURLString)
+            addAttributes(attributedString,
+                          range: formatRange,
+                          link: linkURLString)
         #endif
     }
 
