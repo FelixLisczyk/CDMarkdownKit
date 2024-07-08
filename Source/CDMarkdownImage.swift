@@ -165,6 +165,8 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
 private extension CDImage {
     func withSize(_ newSize: CGSize) -> CDImage {
         guard Thread.isMainThread else { return self }
+        // Don't render images in extensions as this may exceed their memory capacity.
+        guard !(Bundle.main.executablePath ?? "").contains(".appex") else { return self }
         #if os(iOS) || os(tvOS)
             let image = UIGraphicsImageRenderer(size: newSize).image { _ in
                 draw(in: CGRect(origin: .zero, size: newSize))
