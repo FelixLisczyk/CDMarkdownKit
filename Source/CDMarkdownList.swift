@@ -33,7 +33,7 @@
 
 open class CDMarkdownList: CDMarkdownLevelElement {
 
-    fileprivate static let regex = "^(\\*{1,%@})[ \\t]{1}(.*)$"
+    fileprivate static let regex = "^(\\*{1,%@}) (\\S{1}.*)$"
 
     private let indicatorTextSpacing: String = "  "
 
