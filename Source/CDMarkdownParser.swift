@@ -62,6 +62,7 @@ open class CDMarkdownParser {
     // Enables or disables detection of URLs even without Markdown format
     open var automaticLinkDetectionEnabled: Bool = true
     open var automaticListConversion: Bool = true
+    open var renderImages: Bool = true
 
     open var font: CDFont {
         didSet {
@@ -195,6 +196,7 @@ open class CDMarkdownParser {
         self.automaticLinkDetectionEnabled = automaticLinkDetectionEnabled
         self.escapingElements = []
         self.defaultElements = [header, list, bold, italic, image, link, syntax]
+
         self.unescapingElements = []
         self.preCustomElements = preCustomElements
         self.postCustomElements = postCustomElements
@@ -244,6 +246,9 @@ open class CDMarkdownParser {
 
         elements.forEach { element in
             if automaticListConversion == false && type(of: element) == CDMarkdownList.self {
+                return
+            }
+            if renderImages == false && type(of: element) == CDMarkdownImage.self {
                 return
             }
             if automaticLinkDetectionEnabled || type(of: element) != CDMarkdownAutomaticLink.self {
