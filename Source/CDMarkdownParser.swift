@@ -217,8 +217,8 @@ open class CDMarkdownParser {
         return self.parse(markdown, with: elements)
     }
 
-    open func parseImages(_ markdown: NSAttributedString) -> NSAttributedString {
-        return self.parse(markdown, with: [self.image])
+    open func parseImages(_ markdown: NSAttributedString, additionalElements: [CDMarkdownElement] = []) -> NSAttributedString {
+        return self.parse(markdown, with: [self.image] + additionalElements)
     }
 
     public func setImageDelegate(_ imageDelegate: CDMarkdownImageDelegate) {
