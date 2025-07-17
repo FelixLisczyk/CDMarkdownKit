@@ -66,7 +66,15 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
 
     open func formatText(_ attributedString: NSMutableAttributedString,
                          range: NSRange,
-                         link: String) {}
+                         link: String) {
+        guard let encodedLink = link.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)
+            else {
+                return
+        }
+        guard let url = URL(string: link) ?? URL(string: encodedLink) else { return }
+
+        attributedString.addAttribute(.link, value: url, range: range)
+    }
 
     open func match(_ match: NSTextCheckingResult,
                     attributedString: NSMutableAttributedString) {
