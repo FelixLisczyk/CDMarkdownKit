@@ -40,6 +40,7 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     open var backgroundColor: CDColor?
     open var paragraphStyle: NSParagraphStyle?
     open var size: CGSize?
+    open var addLinkAttribute: Bool = true
 
     open var regex: String {
         return CDMarkdownImage.regex
@@ -67,6 +68,8 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     open func formatText(_ attributedString: NSMutableAttributedString,
                          range: NSRange,
                          link: String) {
+        guard addLinkAttribute else { return }
+
         guard let encodedLink = link.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)
             else {
                 return

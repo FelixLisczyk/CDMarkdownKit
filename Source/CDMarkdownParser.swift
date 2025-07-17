@@ -63,6 +63,7 @@ open class CDMarkdownParser {
     open var automaticLinkDetectionEnabled: Bool = true
     open var automaticListConversion: Bool = true
     open var renderImages: Bool = true
+    open var addImageLinkAttribute: Bool = true
 
     open var font: CDFont {
         didSet {
@@ -192,6 +193,8 @@ open class CDMarkdownParser {
                                 backgroundColor: backgroundColor,
                                 paragraphStyle: paragraphStyle,
                                 size: imageSize)
+        
+        image.addLinkAttribute = addImageLinkAttribute
 
         self.automaticLinkDetectionEnabled = automaticLinkDetectionEnabled
         self.escapingElements = []
