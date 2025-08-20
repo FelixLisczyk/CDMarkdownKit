@@ -231,10 +231,21 @@ open class CDMarkdownParser {
     private func parse(_ markdown: NSAttributedString, with elements: [CDMarkdownElement]) -> NSAttributedString {
         let attributedString = NSMutableAttributedString(attributedString: markdown)
         let mutableString = attributedString.mutableString
-        mutableString.replaceOccurrences(of: "&nbsp;",
-                                         with: " ",
-                                         range: NSRange(location: 0,
-                                                        length: mutableString.length))
+
+        // Ensure string operations are thread-safe
+        if Thread.isMainThread {
+            mutableString.replaceOccurrences(of: "&nbsp;",
+                                             with: " ",
+                                             range: NSRange(location: 0,
+                                                            length: mutableString.length))
+        } else {
+            DispatchQueue.main.sync {
+                mutableString.replaceOccurrences(of: "&nbsp;",
+                                                 with: " ",
+                                                 range: NSRange(location: 0,
+                                                                length: mutableString.length))
+            }
+        }
         let range = NSRange(location: 0,
                             length: attributedString.length)
 
