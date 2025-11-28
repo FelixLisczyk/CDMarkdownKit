@@ -175,10 +175,12 @@ private extension CDImage {
             }
             return image.withRenderingMode(renderingMode)
         #elseif os(macOS)
+            let scale: CGFloat = NSScreen.main?.backingScaleFactor ?? 2.0
+
             guard let bitmap = NSBitmapImageRep(
                 bitmapDataPlanes: nil,
-                pixelsWide: Int(newSize.width),
-                pixelsHigh: Int(newSize.height),
+                pixelsWide: Int(newSize.width * scale),
+                pixelsHigh: Int(newSize.height * scale),
                 bitsPerSample: 8,
                 samplesPerPixel: 4,
                 hasAlpha: true,
@@ -192,6 +194,7 @@ private extension CDImage {
 
             NSGraphicsContext.saveGraphicsState()
             NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
+            NSGraphicsContext.current?.imageInterpolation = .high
 
             self.draw(in: NSRect(x: 0, y: 0, width: newSize.width, height: newSize.height), from: .zero, operation: .copy, fraction: 1.0)
 
