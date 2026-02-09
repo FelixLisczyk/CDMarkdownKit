@@ -63,7 +63,11 @@ open class CDMarkdownParser {
     open var automaticLinkDetectionEnabled: Bool = true
     open var automaticListConversion: Bool = true
     open var renderImages: Bool = true
-    open var addImageLinkAttribute: Bool = true
+    open var addImageLinkAttribute: Bool = true {
+        didSet {
+            self.image.addLinkAttribute = addImageLinkAttribute
+        }
+    }
 
     open var font: CDFont {
         didSet {
