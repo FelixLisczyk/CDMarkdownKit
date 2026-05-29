@@ -162,5 +162,3 @@ open class CDMarkdownImage: CDMarkdownLinkElement {
     }
     #endif
 }
-
-#endif
